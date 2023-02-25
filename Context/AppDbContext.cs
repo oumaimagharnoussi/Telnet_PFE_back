@@ -10,8 +10,12 @@ namespace Ticketback.Context
 
         }
         public DbSet<User> Users { get; set; }
-       
-        
+        public DbSet<Etat> Etats { get; set; }
+        public DbSet<Site> Sites { get; set; }
+        public DbSet<Activite> Activites { get; set; }
+        public DbSet<Groupe> Groupes { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("users");
