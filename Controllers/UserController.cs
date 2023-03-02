@@ -162,9 +162,9 @@ namespace Ticketback.Controllers
                 email = addUserRequest.email,
                 Role = addUserRequest.Role,
                 Token = addUserRequest.Token,
-                //Activites = addUserRequest.Activites,
-               // Sites = addUserRequest.Sites,
-               // Groupes = addUserRequest.Groupes
+                groupId = addUserRequest.groupId,
+                
+                activityId = addUserRequest.activityId
             };
             user.userPassword = PasswordHasher.HashPassword(user.userPassword);
             await _authContext.Users.AddAsync(user);
@@ -176,10 +176,10 @@ namespace Ticketback.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
-        public async Task<IActionResult> UpdateUser([FromRoute] int id, UpdateUserRequest updateUserRequest)
+        [Route("{userId:int}")]
+        public async Task<IActionResult> UpdateUser([FromRoute] int userId, UpdateUserRequest updateUserRequest)
         {
-            var user = await _authContext.Users.FindAsync(id);
+            var user = await _authContext.Users.FindAsync(userId);
             if (User != null)
             {
                 user.userNumber = updateUserRequest.userNumber;
@@ -192,8 +192,8 @@ namespace Ticketback.Controllers
                 user.email = updateUserRequest.email;
                 user.Role = updateUserRequest.Role;
                 //user.Token = updateUserRequest.Token;
-                //user.Groupes = updateUserRequest.Groupes;
-                //user.Activites = updateUserRequest.Activites;
+                user.activityId = updateUserRequest.activityId;
+                user.groupId = updateUserRequest.groupId;
                 //user.Sites = updateUserRequest.Sites;
 
                 user.userPassword = PasswordHasher.HashPassword(user.userPassword);
@@ -204,10 +204,10 @@ namespace Ticketback.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
-        public async Task<IActionResult> GetUser([FromRoute] int id)
+        [Route("{userId:int}")]
+        public async Task<IActionResult> GetUser([FromRoute] int userId)
         {
-            var user = await _authContext.Users.FindAsync(id);
+            var user = await _authContext.Users.FindAsync(userId);
             if (user == null)
             {
                 return NotFound();
@@ -217,10 +217,10 @@ namespace Ticketback.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
-        public async Task<IActionResult> DeleteUser([FromRoute] int id)
+        [Route("{userId:int}")]
+        public async Task<IActionResult> DeleteUser([FromRoute] int userId)
         {
-            var user = await _authContext.Users.FindAsync(id);
+            var user = await _authContext.Users.FindAsync(userId);
             if (user != null)
             {
                 _authContext.Remove(user);

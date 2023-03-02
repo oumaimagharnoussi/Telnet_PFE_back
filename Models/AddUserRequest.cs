@@ -12,9 +12,7 @@
         public int qualification { get; set; }
         public string Token { get; set; }
         public string Role { get; set; }
-
-       // public List<Activite> Activites { get; set; }
-     //   public List<Site> Sites { get; set; }
-      //  public List<Groupe> Groupes { get; set; }
+        public int groupId { get; set; }
+        public int activityId { get; set; }
     }
 }

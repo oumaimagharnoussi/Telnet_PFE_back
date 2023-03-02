@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ticketback.Context;
 
@@ -11,9 +12,11 @@ using Ticketback.Context;
 namespace Ticketback.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230302125923_v6")]
+    partial class v6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,18 +25,18 @@ namespace Ticketback.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Ticketback.Models.Activities", b =>
+            modelBuilder.Entity("Ticketback.Models.Activite", b =>
                 {
-                    b.Property<int>("activityId")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("activityId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
                     b.Property<string>("libelle")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("activityId");
+                    b.HasKey("id");
 
                     b.ToTable("Activites");
                 });
@@ -54,22 +57,6 @@ namespace Ticketback.Migrations
                     b.ToTable("Etats");
                 });
 
-            modelBuilder.Entity("Ticketback.Models.Groups", b =>
-                {
-                    b.Property<int>("groupId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("groupId"));
-
-                    b.Property<string>("libelle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("groupId");
-
-                    b.ToTable("Groupss");
-                });
-
             modelBuilder.Entity("Ticketback.Models.Site", b =>
                 {
                     b.Property<int>("id")
@@ -88,17 +75,11 @@ namespace Ticketback.Migrations
 
             modelBuilder.Entity("Ticketback.Models.User", b =>
                 {
-                    b.Property<int>("userId")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userId"));
-
-                    b.Property<int?>("ActivitiesactivityId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("GroupsgroupId")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
                     b.Property<DateTime>("ResetPasswordExpiry")
                         .HasColumnType("datetime2");
@@ -112,17 +93,11 @@ namespace Ticketback.Migrations
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("activityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("email")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("firstName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("groupId")
-                        .HasColumnType("int");
 
                     b.Property<string>("lastName")
                         .HasColumnType("nvarchar(max)");
@@ -142,38 +117,9 @@ namespace Ticketback.Migrations
                     b.Property<string>("userPassword")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("userId");
-
-                    b.HasIndex("ActivitiesactivityId");
-
-                    b.HasIndex("GroupsgroupId");
+                    b.HasKey("id");
 
                     b.ToTable("users", (string)null);
-                });
-
-            modelBuilder.Entity("Ticketback.Models.User", b =>
-                {
-                    b.HasOne("Ticketback.Models.Activities", "Activities")
-                        .WithMany("Users")
-                        .HasForeignKey("ActivitiesactivityId");
-
-                    b.HasOne("Ticketback.Models.Groups", "Groups")
-                        .WithMany("Users")
-                        .HasForeignKey("GroupsgroupId");
-
-                    b.Navigation("Activities");
-
-                    b.Navigation("Groups");
-                });
-
-            modelBuilder.Entity("Ticketback.Models.Activities", b =>
-                {
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Ticketback.Models.Groups", b =>
-                {
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

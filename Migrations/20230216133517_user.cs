@@ -32,7 +32,7 @@ namespace Ticketback.Migrations
                     table.PrimaryKey("PK_users", x => x.userId);
                 });
 
-            migrationBuilder.CreateTable(
+            /*migrationBuilder.CreateTable(
                 name: "Activite",
                 columns: table => new
                 {
@@ -50,7 +50,7 @@ namespace Ticketback.Migrations
                         principalTable: "users",
                         principalColumn: "userId",
                         onDelete: ReferentialAction.Cascade);
-                });
+                });*/
 
             migrationBuilder.CreateTable(
                 name: "Groupe",
@@ -92,10 +92,10 @@ namespace Ticketback.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
+           /* migrationBuilder.CreateIndex(
                 name: "IX_Activite_userId",
                 table: "Activite",
-                column: "userId");
+                column: "userId");*/
 
             migrationBuilder.CreateIndex(
                 name: "IX_Groupe_userId",
@@ -111,8 +111,8 @@ namespace Ticketback.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Activite");
+          /*  migrationBuilder.DropTable(
+                name: "Activite");*/
 
             migrationBuilder.DropTable(
                 name: "Groupe");

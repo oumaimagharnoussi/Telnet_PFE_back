@@ -1,6 +1,6 @@
 ﻿namespace Ticketback.Models
 {
-    public class AddGroupeRequest
+    public class AddGroupsRequest
     {
         public string libelle { get; set; }
     }

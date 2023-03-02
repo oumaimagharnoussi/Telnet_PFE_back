@@ -2,10 +2,11 @@
 
 namespace Ticketback.Models
 {
-    public class Groupe
+    public class Groups
     {
         [Key]
-        public int id { get; set; }
+        public int groupId { get; set; }
         public string libelle { get; set; }
+        public ICollection<User> Users { get; set; }
     }
 }

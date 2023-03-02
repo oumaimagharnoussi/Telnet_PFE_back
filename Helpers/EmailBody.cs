@@ -15,9 +15,9 @@ namespace Ticketback.Helpers
                  <div>
                    <h1>Reset your Password</h1>
                    <hr>
-                   <p>You're receiving this e-mail because you request a password reset for your Telnet Holding account</p>
+                   <p>You're receiving this email because you request a password reset for your Telnet Holding account</p>
                    <p>Please tap the link below to choose a new password</p>
-                   <a href=""http://localhost:63958/reset-password?email={email}&code={emailToken}""> Reset Password </a><br>
+                   <a href=""http://localhost:63958/reset?email={email}&code={emailToken}""> Reset Password </a><br>
                    <p> Kind Regards,<br><br> Telnet Holding </p>
                 </div>
                </div>

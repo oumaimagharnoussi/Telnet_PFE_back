@@ -90,3 +90,4 @@ C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\MailKit.dll
 C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\MimeKit.dll
 C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\NETCore.MailKit.dll
 C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\BouncyCastle.Crypto.dll
+C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.Design.dll

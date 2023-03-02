@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Ticketback.Models
 {
     public class User
     {
         [Key]
-        public int id { get; set; } //Id
+        public int userId { get; set; } //Id
         public string userNumber { get; set; }
         public string firstName { get; set; } //FirstName
         public string lastName { get; set; } //LastName
@@ -19,9 +21,11 @@ namespace Ticketback.Models
 
         public string ResetPasswordToken { get; set; }
         public DateTime ResetPasswordExpiry { get; set; }
-
-        //public List<Activite> Activites { get; set; }
-       // public List<Site> Sites { get; set; }
-       // public List<Groupe> Groupes { get; set; }
+        [JsonIgnore]
+        public Groups Groups { get; set; }
+        public int groupId { get; set; }
+        [JsonIgnore]
+        public Activities Activities { get; set; }
+        public int activityId { get; set; }
     }
 }

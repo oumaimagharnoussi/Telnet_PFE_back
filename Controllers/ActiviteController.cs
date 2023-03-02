@@ -19,7 +19,7 @@ namespace Ticketback.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<Activite>> GetAllActivites()
+        public async Task<ActionResult<Activities>> GetAllActivites()
         {
             return Ok(await _authContext.Activites.ToListAsync());
         }
@@ -27,7 +27,7 @@ namespace Ticketback.Controllers
         [HttpPost]
         public async Task<IActionResult> AddActivite(AddActiviteRequest addActiviteRequest)
         {
-            var activite = new Activite()
+            var activite = new Activities()
             {
 
                 libelle = addActiviteRequest.libelle,
@@ -43,10 +43,10 @@ namespace Ticketback.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
-        public async Task<IActionResult> UpdateActivite([FromRoute] int id, UpdateActiviteRequest updateActiviteRequest)
+        [Route("{activityId:int}")]
+        public async Task<IActionResult> UpdateActivite([FromRoute] int activityId, UpdateActiviteRequest updateActiviteRequest)
         {
-            var activite = await _authContext.Activites.FindAsync(id);
+            var activite = await _authContext.Activites.FindAsync(activityId);
             if (activite != null)
             {
                 activite.libelle = updateActiviteRequest.libelle;
@@ -58,10 +58,10 @@ namespace Ticketback.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
-        public async Task<IActionResult> GetActivite([FromRoute] int id)
+        [Route("{activityId:int}")]
+        public async Task<IActionResult> GetActivite([FromRoute] int activityId)
         {
-            var activite = await _authContext.Activites.FindAsync(id);
+            var activite = await _authContext.Activites.FindAsync(activityId);
             if (activite == null)
             {
                 return NotFound();
@@ -71,10 +71,10 @@ namespace Ticketback.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
-        public async Task<IActionResult> DeleteActivite([FromRoute] int id)
+        [Route("{activityId:int}")]
+        public async Task<IActionResult> DeleteActivite([FromRoute] int activityId)
         {
-            var activite = await _authContext.Activites.FindAsync(id);
+            var activite = await _authContext.Activites.FindAsync(activityId);
             if (activite != null)
             {
                 _authContext.Remove(activite);

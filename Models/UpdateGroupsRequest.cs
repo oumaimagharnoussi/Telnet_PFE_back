@@ -1,6 +1,6 @@
 ﻿namespace Ticketback.Models
 {
-    public class UpdateGroupeRequest
+    public class UpdateGroupsRequest
     {
         public string libelle { get; set; }
     }
