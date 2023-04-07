@@ -66,30 +66,41 @@ namespace Ticketback.Controllers
         }
 
         //create token
+        
+
+
         private string CreateToken(User user)
-        {
-            List<Claim> claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Role, user.Role),
-                new Claim(ClaimTypes.Name, user.userName)
-            };
+           {
+               List<Claim> claims = new List<Claim>
+       {
+           new Claim(ClaimTypes.Role, user.Role),
+           new Claim("name", user.userName),
+           new Claim("lastname", user.lastName),
+           new Claim("email", user.email),
+           new Claim("activitie", user.activityId.ToString()),
+           new Claim("usernmber", user.userNumber),
+          // new Claim("activitie", user.Activitie?.libelle?.ToString()),
 
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSettings:Token").Value));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddDays(1),
-                signingCredentials: creds);
-
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-            return jwt;
-        }
+           new Claim("Groups", user.groupId.ToString())
+       };
 
 
+
+               var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                   _configuration.GetSection("AppSettings:Token").Value));
+
+               var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+               var token = new JwtSecurityToken(
+                   claims: claims,
+                   expires: DateTime.Now.AddDays(1),
+                   signingCredentials: creds);
+
+               var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+               return jwt;
+           }
+          
 
 
         [HttpPost("register")]
@@ -97,6 +108,9 @@ namespace Ticketback.Controllers
         {
             if (userObj == null)
                 return BadRequest();
+            //check userNumber 
+            if (await CheckUserNumberExistAsync(userObj.userNumber))
+                return BadRequest(new { Message = "UserNumber Already Exist!" });
             //check username 
             if (await CheckUserNameExistAsync(userObj.userName))
                 return BadRequest(new { Message = "Username Already Exist!" });
@@ -122,6 +136,8 @@ namespace Ticketback.Controllers
 
         private Task<bool> CheckUserNameExistAsync(string userName)
           => _authContext.Users.AnyAsync(x => x.userName == userName);
+        private Task<bool> CheckUserNumberExistAsync(string userNumber)
+         => _authContext.Users.AnyAsync(x => x.userNumber == userNumber);
 
         private Task<bool> CheckEmailExistAsync(string email)
           => _authContext.Users.AnyAsync(x => x.email == email);
@@ -156,17 +172,17 @@ namespace Ticketback.Controllers
                 firstName = addUserRequest.firstName,
                 lastName = addUserRequest.lastName,
                 userName = addUserRequest.userName,
-                userPassword = addUserRequest.userPassword,
+                //userPassword = addUserRequest.userPassword,
                 picture = addUserRequest.picture,
                 qualification = addUserRequest.qualification,
                 email = addUserRequest.email,
-                Role = addUserRequest.Role,
-                Token = addUserRequest.Token,
-                groupId = addUserRequest.groupId,
+                //Role = addUserRequest.Role,
+                //Token = addUserRequest.Token,
+               // groupId = addUserRequest.groupId,
                 
                 activityId = addUserRequest.activityId
             };
-            user.userPassword = PasswordHasher.HashPassword(user.userPassword);
+            //user.userPassword = PasswordHasher.HashPassword(user.userPassword);
             await _authContext.Users.AddAsync(user);
             await _authContext.SaveChangesAsync();
 
@@ -186,17 +202,17 @@ namespace Ticketback.Controllers
                 user.firstName = updateUserRequest.firstName;
                 user.lastName = updateUserRequest.lastName;
                 user.userName = updateUserRequest.userName;
-                user.userPassword = updateUserRequest.userPassword;
+                //user.userPassword = updateUserRequest.userPassword;
                 user.picture = updateUserRequest.picture;
                 user.qualification = updateUserRequest.qualification;
                 user.email = updateUserRequest.email;
-                user.Role = updateUserRequest.Role;
+               // user.Role = updateUserRequest.Role;
                 //user.Token = updateUserRequest.Token;
                 user.activityId = updateUserRequest.activityId;
-                user.groupId = updateUserRequest.groupId;
+               // user.groupId = updateUserRequest.groupId;
                 //user.Sites = updateUserRequest.Sites;
 
-                user.userPassword = PasswordHasher.HashPassword(user.userPassword);
+               // user.userPassword = PasswordHasher.HashPassword(user.userPassword);
                 await _authContext.SaveChangesAsync();
                 return Ok(user);
             }
@@ -262,7 +278,8 @@ namespace Ticketback.Controllers
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPassword resetPassword)
         {
-            var newToken = resetPassword.EmailToken.Replace("", "+");
+            var newToken = resetPassword.EmailToken.Replace("+", "-");
+
             var user = await _authContext.Users.AsNoTracking().FirstOrDefaultAsync(a => a.email == resetPassword.email);
             if (user is null)
             {

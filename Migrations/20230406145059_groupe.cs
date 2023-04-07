@@ -5,30 +5,31 @@
 namespace Ticketback.Migrations
 {
     /// <inheritdoc />
-    public partial class groups : Migration
+    public partial class groupe : Migration
     {
         /// <inheritdoc />
+        
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Groupss",
+                name: "Groupes",
                 columns: table => new
                 {
-                    groupId = table.Column<int>(type: "int", nullable: false)
+                    groupId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    libelle = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    libelle = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Groupss", x => x.groupId);
+                    table.PrimaryKey("PK_Groupes", x => x.groupId);
                 });
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Groupss");
+                name: "Groupes");
         }
+
     }
 }

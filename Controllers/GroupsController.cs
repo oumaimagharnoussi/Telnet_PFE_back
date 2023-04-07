@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿/*using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Ticketback.Context;
@@ -84,4 +84,4 @@ namespace Ticketback.Controllers
             return NotFound();
         }
     }
-}
+}*/

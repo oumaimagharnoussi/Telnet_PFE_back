@@ -2,7 +2,7 @@
 
 namespace Ticketback.Models
 {
-    public class Activities
+    public class Activitie
     {
         [Key]
         public int activityId { get; set; }

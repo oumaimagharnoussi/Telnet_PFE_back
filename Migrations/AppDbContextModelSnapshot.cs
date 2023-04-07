@@ -22,7 +22,7 @@ namespace Ticketback.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Ticketback.Models.Activities", b =>
+            modelBuilder.Entity("Ticketback.Models.Activitie", b =>
                 {
                     b.Property<int>("activityId")
                         .ValueGeneratedOnAdd()
@@ -35,7 +35,7 @@ namespace Ticketback.Migrations
 
                     b.HasKey("activityId");
 
-                    b.ToTable("Activites");
+                    b.ToTable("Activities");
                 });
 
             modelBuilder.Entity("Ticketback.Models.Etat", b =>
@@ -54,7 +54,7 @@ namespace Ticketback.Migrations
                     b.ToTable("Etats");
                 });
 
-            modelBuilder.Entity("Ticketback.Models.Groups", b =>
+            modelBuilder.Entity("Ticketback.Models.Groupe", b =>
                 {
                     b.Property<int>("groupId")
                         .ValueGeneratedOnAdd()
@@ -67,7 +67,7 @@ namespace Ticketback.Migrations
 
                     b.HasKey("groupId");
 
-                    b.ToTable("Groupss");
+                    b.ToTable("Groupes");
                 });
 
             modelBuilder.Entity("Ticketback.Models.Site", b =>
@@ -93,12 +93,6 @@ namespace Ticketback.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userId"));
-
-                    b.Property<int?>("ActivitiesactivityId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("GroupsgroupId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("ResetPasswordExpiry")
                         .HasColumnType("datetime2");
@@ -144,36 +138,106 @@ namespace Ticketback.Migrations
 
                     b.HasKey("userId");
 
-                    b.HasIndex("ActivitiesactivityId");
+                    b.HasIndex("activityId");
 
-                    b.HasIndex("GroupsgroupId");
+                    b.HasIndex("groupId");
 
                     b.ToTable("users", (string)null);
                 });
 
+            modelBuilder.Entity("Ticketback.Models.WorkFromHomeRequest", b =>
+                {
+                    b.Property<int>("workHomeRequestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("workHomeRequestId"));
+
+                    b.Property<int>("dayNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<DateTime>("endDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("halfDay")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("motive")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("startDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("state")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("userFullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("userNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("workHomeRequestId");
+
+                    b.HasIndex("userId", "startDate", "endDate")
+                        .IsUnique();
+
+                    b.ToTable("WorkFromHomeRequests");
+                });
+
             modelBuilder.Entity("Ticketback.Models.User", b =>
                 {
-                    b.HasOne("Ticketback.Models.Activities", "Activities")
+                    b.HasOne("Ticketback.Models.Activitie", "Activitie")
                         .WithMany("Users")
-                        .HasForeignKey("ActivitiesactivityId");
+                        .HasForeignKey("activityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Ticketback.Models.Groups", "Groups")
+                    b.HasOne("Ticketback.Models.Groupe", "Groupe")
                         .WithMany("Users")
-                        .HasForeignKey("GroupsgroupId");
+                        .HasForeignKey("groupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Activities");
+                    b.Navigation("Activitie");
 
-                    b.Navigation("Groups");
+                    b.Navigation("Groupe");
                 });
 
-            modelBuilder.Entity("Ticketback.Models.Activities", b =>
+            modelBuilder.Entity("Ticketback.Models.WorkFromHomeRequest", b =>
+                {
+                    b.HasOne("Ticketback.Models.User", "User")
+                        .WithMany("WorkFromHomeRequests")
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_WorkFromHomeRequests_Users");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Ticketback.Models.Activitie", b =>
                 {
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("Ticketback.Models.Groups", b =>
+            modelBuilder.Entity("Ticketback.Models.Groupe", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Ticketback.Models.User", b =>
+                {
+                    b.Navigation("WorkFromHomeRequests");
                 });
 #pragma warning restore 612, 618
         }

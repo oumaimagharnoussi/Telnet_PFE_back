@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection.Metadata;
 using System.Text.Json.Serialization;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
@@ -21,11 +23,16 @@ namespace Ticketback.Models
 
         public string ResetPasswordToken { get; set; }
         public DateTime ResetPasswordExpiry { get; set; }
-        [JsonIgnore]
-        public Groups Groups { get; set; }
+      
+       // public Groups groupId { get; set; }
+
+        public List<WorkFromHomeRequest> WorkFromHomeRequests { get; set; }
+
+       
+         public int activityId { get; set; }
+         public Activitie Activitie { get; set; }
+        [ForeignKey("Groupe")]
         public int groupId { get; set; }
-        [JsonIgnore]
-        public Activities Activities { get; set; }
-        public int activityId { get; set; }
+        public Groupe Groupe { get; set; }
     }
 }

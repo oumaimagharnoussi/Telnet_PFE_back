@@ -91,3 +91,12 @@ C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\MimeKit.dll
 C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\NETCore.MailKit.dll
 C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\BouncyCastle.Crypto.dll
 C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.Design.dll
+C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\Microsoft.OData.Edm.dll
+C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\Microsoft.Recognizers.Definitions.dll
+C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\Microsoft.Recognizers.Text.dll
+C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\Microsoft.Recognizers.Text.DataTypes.TimexExpression.dll
+C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\Microsoft.Recognizers.Text.DateTime.dll
+C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\Microsoft.Recognizers.Text.Number.dll
+C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\Microsoft.Recognizers.Text.NumberWithUnit.dll
+C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\NodaTime.dll
+C:\Users\gharn\Desktop\Ticketback\Ticketback\bin\Debug\net6.0\Newtonsoft.Json.dll
