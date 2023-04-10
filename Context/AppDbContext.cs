@@ -3,6 +3,7 @@ using Ticketback.Models;
 using System.Linq;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
+using System.Security.Claims;
 
 namespace Ticketback.Context
 {
@@ -13,7 +14,7 @@ namespace Ticketback.Context
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Etat> Etats { get; set; }
-        public DbSet<Site> Sites { get; set; }
+      //  public DbSet<Site> Sites { get; set; }
         public DbSet<Activitie> Activities { get; set; }
         public DbSet<Groupe> Groupes { get; set; }
         public DbSet<WorkFromHomeRequest> WorkFromHomeRequests { get; set; }
@@ -46,10 +47,17 @@ namespace Ticketback.Context
                 .WithMany(a => a.Users)
                 .HasForeignKey(u => u.activityId);
 
-            modelBuilder.Entity<User>()
-             .HasOne<Groupe>(u => u.Groupe)
-             .WithMany(g => g.Users)
-             .HasForeignKey(u => u.groupId);
+             modelBuilder.Entity<User>()
+              .HasOne(u => u.Groupe)
+              .WithMany(g => g.Users)
+              .HasForeignKey(u => u.groupId);
+
+         /*  modelBuilder.Entity<User>()
+            .HasOne(u => u.Site)
+            .WithMany(s => s.Users)
+            .HasForeignKey(u => u.siteId)
+            .OnDelete(DeleteBehavior.Cascade);*/
+
 
 
 
@@ -72,7 +80,17 @@ namespace Ticketback.Context
                 .HasDefaultValue(HalfDay.Morning);
         }
 
+        internal Task ChangePasswordAsync(object user, string currentPassword, string newPassword)
+        {
+            throw new NotImplementedException();
+        }
+
         internal object GetSection(string v)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Task GetUserAsync(ClaimsPrincipal user)
         {
             throw new NotImplementedException();
         }

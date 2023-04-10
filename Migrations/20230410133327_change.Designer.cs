@@ -12,8 +12,8 @@ using Ticketback.Context;
 namespace Ticketback.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230406160852_groupidFK")]
-    partial class groupidFK
+    [Migration("20230410133327_change")]
+    partial class change
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

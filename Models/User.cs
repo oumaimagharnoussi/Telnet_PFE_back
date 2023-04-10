@@ -28,11 +28,20 @@ namespace Ticketback.Models
 
         public List<WorkFromHomeRequest> WorkFromHomeRequests { get; set; }
 
+
+        public int activityId { get; set; }
+        [ForeignKey("activityId")]
        
-         public int activityId { get; set; }
-         public Activitie Activitie { get; set; }
-        [ForeignKey("Groupe")]
+        public Activitie Activitie { get; set; }
+
         public int groupId { get; set; }
-        public Groupe Groupe { get; set; }
+        [ForeignKey("groupId")]
+        
+        public  Groupe Groupe { get; set; }
+       
+       /* public int siteId { get; set; }
+
+        [ForeignKey("siteId")]
+        public Site Site { get; set; }*/
     }
 }

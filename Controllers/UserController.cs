@@ -19,6 +19,7 @@ using Ticketback.Models;
 using Ticketback.Helpers;
 using System.Security.Cryptography;
 using Ticketback.UtilityService;
+using Ticketback.Migrations;
 
 namespace Ticketback.Controllers
 {
@@ -66,41 +67,40 @@ namespace Ticketback.Controllers
         }
 
         //create token
-        
-
-
         private string CreateToken(User user)
-           {
-               List<Claim> claims = new List<Claim>
-       {
-           new Claim(ClaimTypes.Role, user.Role),
-           new Claim("name", user.userName),
-           new Claim("lastname", user.lastName),
-           new Claim("email", user.email),
-           new Claim("activitie", user.activityId.ToString()),
-           new Claim("usernmber", user.userNumber),
-          // new Claim("activitie", user.Activitie?.libelle?.ToString()),
+             {
+                 List<Claim> claims = new List<Claim>
+         {
+             new Claim(ClaimTypes.Role, user.Role),
+             new Claim("name", user.userName),
+             new Claim("lastname", user.lastName),
+             new Claim("email", user.email),
+              new Claim("firstname", user.firstName),
+             new Claim("activitie", user.activityId.ToString()),
+             new Claim("usernumber", user.userNumber),
+         
+             new Claim("Groups", user.groupId.ToString())
+         };
 
-           new Claim("Groups", user.groupId.ToString())
-       };
 
 
+                 var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                     _configuration.GetSection("AppSettings:Token").Value));
 
-               var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                   _configuration.GetSection("AppSettings:Token").Value));
+                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-               var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+                 var token = new JwtSecurityToken(
+                     claims: claims,
+                     expires: DateTime.Now.AddDays(1),
+                     signingCredentials: creds);
 
-               var token = new JwtSecurityToken(
-                   claims: claims,
-                   expires: DateTime.Now.AddDays(1),
-                   signingCredentials: creds);
+                 var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-               var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+                 return jwt;
+             }
+       
 
-               return jwt;
-           }
-          
+
 
 
         [HttpPost("register")]
@@ -173,14 +173,14 @@ namespace Ticketback.Controllers
                 lastName = addUserRequest.lastName,
                 userName = addUserRequest.userName,
                 //userPassword = addUserRequest.userPassword,
-                picture = addUserRequest.picture,
-                qualification = addUserRequest.qualification,
+               // picture = addUserRequest.picture,
+               // qualification = addUserRequest.qualification,
                 email = addUserRequest.email,
                 //Role = addUserRequest.Role,
                 //Token = addUserRequest.Token,
                // groupId = addUserRequest.groupId,
                 
-                activityId = addUserRequest.activityId
+               // activityId = addUserRequest.activityId
             };
             //user.userPassword = PasswordHasher.HashPassword(user.userPassword);
             await _authContext.Users.AddAsync(user);
@@ -221,16 +221,16 @@ namespace Ticketback.Controllers
 
         [HttpGet]
         [Route("{userId:int}")]
-        public async Task<IActionResult> GetUser([FromRoute] int userId)
-        {
-            var user = await _authContext.Users.FindAsync(userId);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return Ok(user);
+         public async Task<IActionResult> GetUser([FromRoute] int userId)
+         {
+             var user = await _authContext.Users.FindAsync(userId);
+             if (user == null)
+             {
+                 return NotFound();
+             }
+             return Ok(user);
 
-        }
+         }
 
         [HttpDelete]
         [Route("{userId:int}")]
