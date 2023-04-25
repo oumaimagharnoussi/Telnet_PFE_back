@@ -9,13 +9,13 @@ namespace Ticketback.Models
     public class User
     {
         [Key]
-        public int userId { get; set; } //Id
+        public int userId { get; set; } 
         public string userNumber { get; set; }
-        public string firstName { get; set; } //FirstName
-        public string lastName { get; set; } //LastName
-        public string userName { get; set; } //Username
-        public string userPassword { get; set; } //Password
-        public string email { get; set; } //Email
+        public string firstName { get; set; } 
+        public string lastName { get; set; }
+        public string userName { get; set; } 
+        public string userPassword { get; set; }
+        public string email { get; set; } 
         public string picture { get; set; }
         public int qualification { get; set; }
         public string Token { get; set; }
@@ -23,8 +23,6 @@ namespace Ticketback.Models
 
         public string ResetPasswordToken { get; set; }
         public DateTime ResetPasswordExpiry { get; set; }
-      
-       // public Groups groupId { get; set; }
 
         public List<WorkFromHomeRequest> WorkFromHomeRequests { get; set; }
 
@@ -39,9 +37,6 @@ namespace Ticketback.Models
         
         public  Groupe Groupe { get; set; }
        
-       /* public int siteId { get; set; }
-
-        [ForeignKey("siteId")]
-        public Site Site { get; set; }*/
+      
     }
 }

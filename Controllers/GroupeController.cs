@@ -28,6 +28,7 @@ namespace Ticketback.Controllers
             {
 
                 libelle = addGroupeRequest.libelle,
+                Users = addGroupeRequest.Users,
 
             };
 
@@ -46,6 +47,7 @@ namespace Ticketback.Controllers
             if (groupe != null)
             {
                 groupe.libelle = updateGroupeRequest.libelle;
+                groupe.Users = updateGroupeRequest.Users;
 
                 await _authContext.SaveChangesAsync();
                 return Ok(groupe);

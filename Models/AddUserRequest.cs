@@ -15,12 +15,14 @@ namespace Ticketback.Models
         //public string Token { get; set; }
         //public string Role { get; set; }
 
-        public Groups groupId { get; set; }
-        /* public int groupId { get; set; }
-         [ForeignKey("groupId")]
-         public Groups One { get; set; }*/
-        // public int activityId { get; set; }
         public int activityId { get; set; }
+        
+
         public Activitie Activitie { get; set; }
+
+        public int groupId { get; set; }
+      
+
+        public Groupe Groupe { get; set; }
     }
 }

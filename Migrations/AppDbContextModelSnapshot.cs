@@ -70,22 +70,6 @@ namespace Ticketback.Migrations
                     b.ToTable("Groupes");
                 });
 
-            modelBuilder.Entity("Ticketback.Models.Site", b =>
-                {
-                    b.Property<int>("siteId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("siteId"));
-
-                    b.Property<string>("libelle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("siteId");
-
-                    b.ToTable("Sites");
-                });
-
             modelBuilder.Entity("Ticketback.Models.User", b =>
                 {
                     b.Property<int>("userId")
@@ -127,9 +111,6 @@ namespace Ticketback.Migrations
                     b.Property<int>("qualification")
                         .HasColumnType("int");
 
-                    b.Property<int>("siteId")
-                        .HasColumnType("int");
-
                     b.Property<string>("userName")
                         .HasColumnType("nvarchar(max)");
 
@@ -144,8 +125,6 @@ namespace Ticketback.Migrations
                     b.HasIndex("activityId");
 
                     b.HasIndex("groupId");
-
-                    b.HasIndex("siteId");
 
                     b.ToTable("users", (string)null);
                 });
@@ -213,17 +192,9 @@ namespace Ticketback.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ticketback.Models.Site", "Site")
-                        .WithMany()
-                        .HasForeignKey("siteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Activitie");
 
                     b.Navigation("Groupe");
-
-                    b.Navigation("Site");
                 });
 
             modelBuilder.Entity("Ticketback.Models.WorkFromHomeRequest", b =>

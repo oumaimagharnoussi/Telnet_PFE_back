@@ -21,6 +21,8 @@ using System.Security.Cryptography;
 using Ticketback.UtilityService;
 using Ticketback.Migrations;
 
+
+
 namespace Ticketback.Controllers
 {
     [Route("api/[controller]")]
@@ -67,42 +69,38 @@ namespace Ticketback.Controllers
         }
 
         //create token
-        private string CreateToken(User user)
-             {
-                 List<Claim> claims = new List<Claim>
-         {
-             new Claim(ClaimTypes.Role, user.Role),
-             new Claim("name", user.userName),
-             new Claim("lastname", user.lastName),
-             new Claim("email", user.email),
-              new Claim("firstname", user.firstName),
-             new Claim("activitie", user.activityId.ToString()),
-             new Claim("usernumber", user.userNumber),
-         
-             new Claim("Groups", user.groupId.ToString())
-         };
+         private string CreateToken(User user)
+              {
+                  List<Claim> claims = new List<Claim>
+          {
+              new Claim(ClaimTypes.Role, user.Role),
+              new Claim("name", user.userName),
+              new Claim("lastname", user.lastName),
+              new Claim("email", user.email),
+               new Claim("firstname", user.firstName),
+              new Claim("activitie", user.activityId.ToString()),
+              new Claim("usernumber", user.userNumber),
+              new Claim("Groups", user.groupId.ToString()),
+              new Claim("userId", user.userId.ToString()),
+              new Claim("pictureUrl", user.picture)
+          };
 
 
 
-                 var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                     _configuration.GetSection("AppSettings:Token").Value));
+                  var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                      _configuration.GetSection("AppSettings:Token").Value));
 
-                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+                  var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-                 var token = new JwtSecurityToken(
-                     claims: claims,
-                     expires: DateTime.Now.AddDays(1),
-                     signingCredentials: creds);
+                  var token = new JwtSecurityToken(
+                      claims: claims,
+                      expires: DateTime.Now.AddDays(1),
+                      signingCredentials: creds);
 
-                 var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+                  var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-                 return jwt;
-             }
-       
-
-
-
-
+                  return jwt;
+              }
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] User userObj)
         {
@@ -173,14 +171,14 @@ namespace Ticketback.Controllers
                 lastName = addUserRequest.lastName,
                 userName = addUserRequest.userName,
                 //userPassword = addUserRequest.userPassword,
-               // picture = addUserRequest.picture,
+                picture = addUserRequest.picture,
                // qualification = addUserRequest.qualification,
                 email = addUserRequest.email,
                 //Role = addUserRequest.Role,
                 //Token = addUserRequest.Token,
-               // groupId = addUserRequest.groupId,
+               groupId = addUserRequest.groupId,
                 
-               // activityId = addUserRequest.activityId
+                activityId = addUserRequest.activityId
             };
             //user.userPassword = PasswordHasher.HashPassword(user.userPassword);
             await _authContext.Users.AddAsync(user);
@@ -208,8 +206,8 @@ namespace Ticketback.Controllers
                 user.email = updateUserRequest.email;
                // user.Role = updateUserRequest.Role;
                 //user.Token = updateUserRequest.Token;
-                user.activityId = updateUserRequest.activityId;
-               // user.groupId = updateUserRequest.groupId;
+               // user.activityId = updateUserRequest.activityId;
+                //user.groupId = updateUserRequest.groupId;
                 //user.Sites = updateUserRequest.Sites;
 
                // user.userPassword = PasswordHasher.HashPassword(user.userPassword);
@@ -308,5 +306,9 @@ namespace Ticketback.Controllers
                 Message = "Password Reset Successfully"
             });
         }
+
+
+
+
     }
 }

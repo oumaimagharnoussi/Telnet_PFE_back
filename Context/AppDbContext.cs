@@ -14,7 +14,7 @@ namespace Ticketback.Context
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Etat> Etats { get; set; }
-      //  public DbSet<Site> Sites { get; set; }
+      // public DbSet<Site> Sites { get; set; }
         public DbSet<Activitie> Activities { get; set; }
         public DbSet<Groupe> Groupes { get; set; }
         public DbSet<WorkFromHomeRequest> WorkFromHomeRequests { get; set; }
@@ -52,11 +52,10 @@ namespace Ticketback.Context
               .WithMany(g => g.Users)
               .HasForeignKey(u => u.groupId);
 
-         /*  modelBuilder.Entity<User>()
+           /* modelBuilder.Entity<User>()
             .HasOne(u => u.Site)
             .WithMany(s => s.Users)
-            .HasForeignKey(u => u.siteId)
-            .OnDelete(DeleteBehavior.Cascade);*/
+            .HasForeignKey(u => u.siteid);*/
 
 
 
@@ -81,6 +80,11 @@ namespace Ticketback.Context
         }
 
         internal Task ChangePasswordAsync(object user, string currentPassword, string newPassword)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Task FindByIdAsync(string userId)
         {
             throw new NotImplementedException();
         }
