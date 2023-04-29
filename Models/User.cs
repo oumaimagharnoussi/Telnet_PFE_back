@@ -25,7 +25,8 @@ namespace Ticketback.Models
         public DateTime ResetPasswordExpiry { get; set; }
 
         public List<WorkFromHomeRequest> WorkFromHomeRequests { get; set; }
-
+        public List<Ticket> Ticket { get; set; }
+        public List<Commentaire> Commentaire { get; set; }
 
         public int activityId { get; set; }
         [ForeignKey("activityId")]
@@ -36,7 +37,9 @@ namespace Ticketback.Models
         [ForeignKey("groupId")]
         
         public  Groupe Groupe { get; set; }
-       
-      
+
+       /* public int sId { get; set; }
+        [ForeignKey("sId")]
+        public SiteTelnet SiteTelnet { get; set; }*/
     }
 }

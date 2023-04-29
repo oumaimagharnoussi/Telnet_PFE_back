@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ticketback.Context;
 
@@ -11,9 +12,11 @@ using Ticketback.Context;
 namespace Ticketback.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230427195328_prisenchargepar")]
+    partial class prisenchargepar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,6 +137,9 @@ namespace Ticketback.Migrations
                     b.Property<int>("id")
                         .HasColumnType("int");
 
+                    b.Property<int>("prisEnChargePar")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("startDate")
                         .HasColumnType("datetime2");
 
@@ -145,6 +151,8 @@ namespace Ticketback.Migrations
                     b.HasIndex("etatId");
 
                     b.HasIndex("id");
+
+                    b.HasIndex("prisEnChargePar");
 
                     b.HasIndex("userId");
 
@@ -290,6 +298,12 @@ namespace Ticketback.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Ticketback.Models.User", "PrisEnChargePar")
+                        .WithMany()
+                        .HasForeignKey("prisEnChargePar")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Ticketback.Models.User", "User")
                         .WithMany("Ticket")
                         .HasForeignKey("userId")
@@ -297,6 +311,8 @@ namespace Ticketback.Migrations
                         .IsRequired();
 
                     b.Navigation("Etat");
+
+                    b.Navigation("PrisEnChargePar");
 
                     b.Navigation("User");
                 });

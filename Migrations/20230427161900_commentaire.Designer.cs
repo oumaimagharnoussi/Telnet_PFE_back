@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ticketback.Context;
 
@@ -11,9 +12,11 @@ using Ticketback.Context;
 namespace Ticketback.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230427161900_commentaire")]
+    partial class commentaire
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,6 +131,9 @@ namespace Ticketback.Migrations
                     b.Property<int?>("etatId")
                         .HasColumnType("int");
 
+                    b.Property<int>("groupId")
+                        .HasColumnType("int");
+
                     b.Property<int>("halfDay")
                         .HasColumnType("int");
 
@@ -144,7 +150,7 @@ namespace Ticketback.Migrations
 
                     b.HasIndex("etatId");
 
-                    b.HasIndex("id");
+                    b.HasIndex("groupId");
 
                     b.HasIndex("userId");
 
@@ -280,14 +286,14 @@ namespace Ticketback.Migrations
 
             modelBuilder.Entity("Ticketback.Models.Ticket", b =>
                 {
-                    b.HasOne("Ticketback.Models.Etat", null)
+                    b.HasOne("Ticketback.Models.Etat", "Etat")
                         .WithMany("Ticket")
                         .HasForeignKey("etatId");
 
-                    b.HasOne("Ticketback.Models.Etat", "Etat")
+                    b.HasOne("Ticketback.Models.Groupe", "Groupe")
                         .WithMany()
-                        .HasForeignKey("id")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("groupId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Ticketback.Models.User", "User")
@@ -297,6 +303,8 @@ namespace Ticketback.Migrations
                         .IsRequired();
 
                     b.Navigation("Etat");
+
+                    b.Navigation("Groupe");
 
                     b.Navigation("User");
                 });

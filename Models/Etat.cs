@@ -7,5 +7,6 @@ namespace Ticketback.Models
         [Key]
         public int id { get; set; } 
         public string libelle { get; set; }
+        public List<Ticket> Ticket { get; set; }
     }
 }

@@ -14,9 +14,11 @@ namespace Ticketback.Context
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Etat> Etats { get; set; }
-      // public DbSet<Site> Sites { get; set; }
+       // public DbSet<SiteTelnet> SiteTelnes { get; set; }
+        public DbSet<Commentaire> Commentaires { get; set; }
         public DbSet<Activitie> Activities { get; set; }
         public DbSet<Groupe> Groupes { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
         public DbSet<WorkFromHomeRequest> WorkFromHomeRequests { get; set; }
 
         
@@ -52,13 +54,63 @@ namespace Ticketback.Context
               .WithMany(g => g.Users)
               .HasForeignKey(u => u.groupId);
 
-           /* modelBuilder.Entity<User>()
-            .HasOne(u => u.Site)
-            .WithMany(s => s.Users)
-            .HasForeignKey(u => u.siteid);*/
 
+        /*    modelBuilder.Entity<User>()
+        .HasOne(u => u.SiteTelnet)
+        .WithMany(s => s.Users)
+        .HasForeignKey(u => u.sId)
+        .OnDelete(DeleteBehavior.Restrict);*/
 
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Ticket)
+                .WithOne(t => t.User)
+                .HasForeignKey(t => t.userId)
+                .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Commentaire)
+                .WithOne(c => c.User)
+                .HasForeignKey(c => c.userId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Ticket>()
+        .ToTable("Tickets")
+        .HasKey(t => t.ticketId);
+
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.User)
+                .WithMany(u => u.Ticket)
+                .HasForeignKey(t => t.userId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Ticket>()
+         .HasOne(t => t.Etat)
+         .WithMany()
+         .HasForeignKey(t => t.id)
+         .OnDelete(DeleteBehavior.Restrict);
+
+           /* modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.PrisEnChargePar)
+                .WithMany()
+                .HasForeignKey(t => t.prisEnChargePar)
+                .OnDelete(DeleteBehavior.Restrict);*/
+
+            // Configure the Commentaire entity
+            modelBuilder.Entity<Commentaire>()
+                .ToTable("Commentaires")
+                .HasKey(c => c.commentaireId);
+
+            modelBuilder.Entity<Commentaire>()
+                .HasOne(c => c.User)
+                .WithMany(u => u.Commentaire)
+                .HasForeignKey(c => c.userId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Commentaire>()
+               .HasOne(c => c.Ticket)
+               .WithMany(u => u.Commentaire)
+               .HasForeignKey(c => c.ticketId)
+               .OnDelete(DeleteBehavior.Restrict);
 
             // Add indexes to WorkFromHomeRequest entity
             modelBuilder.Entity<WorkFromHomeRequest>()

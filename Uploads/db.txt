@@ -1,0 +1,8 @@
+builder.Services.AddDbContext<AppDbContext>(option =>
+{
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+
+
+ "DefaultConnection": "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=APIApp;Integrated Security=True"

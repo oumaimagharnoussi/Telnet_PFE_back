@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ticketback.Context;
 
@@ -11,9 +12,11 @@ using Ticketback.Context;
 namespace Ticketback.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230427170842_ticket")]
+    partial class ticket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,8 +146,6 @@ namespace Ticketback.Migrations
                     b.HasKey("ticketId");
 
                     b.HasIndex("etatId");
-
-                    b.HasIndex("id");
 
                     b.HasIndex("userId");
 
@@ -280,15 +281,9 @@ namespace Ticketback.Migrations
 
             modelBuilder.Entity("Ticketback.Models.Ticket", b =>
                 {
-                    b.HasOne("Ticketback.Models.Etat", null)
+                    b.HasOne("Ticketback.Models.Etat", "Etat")
                         .WithMany("Ticket")
                         .HasForeignKey("etatId");
-
-                    b.HasOne("Ticketback.Models.Etat", "Etat")
-                        .WithMany()
-                        .HasForeignKey("id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
 
                     b.HasOne("Ticketback.Models.User", "User")
                         .WithMany("Ticket")
