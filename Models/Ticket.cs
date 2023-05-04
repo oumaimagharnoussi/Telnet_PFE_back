@@ -29,9 +29,9 @@ namespace Ticketback.Models
         [ForeignKey("etatId")]
         public Etat Etat { get; set; }
         public float dayNumber { get; set; }
-      /*  public int siteId { get; set; }
-        [ForeignKey("siteId")]
-        public SiteTelnet Site { get; set; }*/
+       public int telnetId { get; set; }
+        [ForeignKey("Telnet_Id")]
+        public Telnet Telnet { get; set; }
         [MaxLength(255)]
         public string File { get; set; }
         public virtual ICollection<Commentaire> Commentaire { get; set; }

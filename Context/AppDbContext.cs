@@ -14,7 +14,7 @@ namespace Ticketback.Context
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Etat> Etats { get; set; }
-       // public DbSet<SiteTelnet> SiteTelnes { get; set; }
+        public DbSet<Telnet> Telnet { get; set; }
         public DbSet<Commentaire> Commentaires { get; set; }
         public DbSet<Activitie> Activities { get; set; }
         public DbSet<Groupe> Groupes { get; set; }
@@ -54,12 +54,20 @@ namespace Ticketback.Context
               .WithMany(g => g.Users)
               .HasForeignKey(u => u.groupId);
 
+             modelBuilder.Entity<User>()
+                             .HasOne(u => u.Telnet)
+                             .WithMany(s => s.Users)
+                             .HasForeignKey(u => u.telnetId);
 
-        /*    modelBuilder.Entity<User>()
-        .HasOne(u => u.SiteTelnet)
-        .WithMany(s => s.Users)
-        .HasForeignKey(u => u.sId)
-        .OnDelete(DeleteBehavior.Restrict);*/
+             modelBuilder.Entity<Telnet>()
+            .HasMany(s => s.Users)
+            .WithOne(u => u.Telnet)
+            .HasForeignKey(u => u.telnetId);
+
+            modelBuilder.Entity<Telnet>()
+            .HasMany(s => s.Ticket)
+            .WithOne(u => u.Telnet)
+            .HasForeignKey(u => u.telnetId);
 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Ticket)
@@ -84,16 +92,32 @@ namespace Ticketback.Context
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Ticket>()
+     .HasOne(t => t.Telnet)
+     .WithMany(a => a.Ticket)
+     .HasForeignKey(t => t.telnetId)
+     .HasPrincipalKey(a => a.telnetId)
+     .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<Ticket>()
          .HasOne(t => t.Etat)
          .WithMany()
          .HasForeignKey(t => t.id)
          .OnDelete(DeleteBehavior.Restrict);
+            // set the default value for Etat.id to 1
+            modelBuilder.Entity<Etat>()
+                .Property(e => e.id)
+                .HasDefaultValue(1);
+            // set the default value for Ticket.id to 1
+            modelBuilder.Entity<Ticket>()
+                .Property(t => t.id)
+                .HasDefaultValue(1);
 
-           /* modelBuilder.Entity<Ticket>()
-                .HasOne(t => t.PrisEnChargePar)
-                .WithMany()
-                .HasForeignKey(t => t.prisEnChargePar)
-                .OnDelete(DeleteBehavior.Restrict);*/
+            /* modelBuilder.Entity<Ticket>()
+                 .HasOne(t => t.PrisEnChargePar)
+                 .WithMany()
+                 .HasForeignKey(t => t.prisEnChargePar)
+                 .OnDelete(DeleteBehavior.Restrict);*/
 
             // Configure the Commentaire entity
             modelBuilder.Entity<Commentaire>()

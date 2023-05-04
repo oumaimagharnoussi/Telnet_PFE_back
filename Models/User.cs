@@ -38,8 +38,8 @@ namespace Ticketback.Models
         
         public  Groupe Groupe { get; set; }
 
-       /* public int sId { get; set; }
-        [ForeignKey("sId")]
-        public SiteTelnet SiteTelnet { get; set; }*/
+        public int telnetId { get; set; }
+         [ForeignKey("telnetId")]
+         public Telnet Telnet { get; set; }
     }
 }

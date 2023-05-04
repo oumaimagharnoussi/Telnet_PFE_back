@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ticketback.Context;
 
@@ -11,9 +12,11 @@ using Ticketback.Context;
 namespace Ticketback.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230429120652_etatpardefaut")]
+    partial class etatpardefaut
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,22 +98,6 @@ namespace Ticketback.Migrations
                     b.ToTable("Groupes");
                 });
 
-            modelBuilder.Entity("Ticketback.Models.Telnet", b =>
-                {
-                    b.Property<int>("telnetId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("telnetId"));
-
-                    b.Property<string>("libelle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("telnetId");
-
-                    b.ToTable("Telnet");
-                });
-
             modelBuilder.Entity("Ticketback.Models.Ticket", b =>
                 {
                     b.Property<int>("ticketId")
@@ -129,9 +116,6 @@ namespace Ticketback.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("Priorite")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Telnet_Id")
                         .HasColumnType("int");
 
                     b.Property<int>("Type")
@@ -157,9 +141,6 @@ namespace Ticketback.Migrations
                     b.Property<DateTime>("startDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("telnetId")
-                        .HasColumnType("int");
-
                     b.Property<int>("userId")
                         .HasColumnType("int");
 
@@ -168,8 +149,6 @@ namespace Ticketback.Migrations
                     b.HasIndex("etatId");
 
                     b.HasIndex("id");
-
-                    b.HasIndex("telnetId");
 
                     b.HasIndex("userId");
 
@@ -217,9 +196,6 @@ namespace Ticketback.Migrations
                     b.Property<int>("qualification")
                         .HasColumnType("int");
 
-                    b.Property<int>("telnetId")
-                        .HasColumnType("int");
-
                     b.Property<string>("userName")
                         .HasColumnType("nvarchar(max)");
 
@@ -234,8 +210,6 @@ namespace Ticketback.Migrations
                     b.HasIndex("activityId");
 
                     b.HasIndex("groupId");
-
-                    b.HasIndex("telnetId");
 
                     b.ToTable("users", (string)null);
                 });
@@ -320,12 +294,6 @@ namespace Ticketback.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Ticketback.Models.Telnet", "Telnet")
-                        .WithMany("Ticket")
-                        .HasForeignKey("telnetId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Ticketback.Models.User", "User")
                         .WithMany("Ticket")
                         .HasForeignKey("userId")
@@ -333,8 +301,6 @@ namespace Ticketback.Migrations
                         .IsRequired();
 
                     b.Navigation("Etat");
-
-                    b.Navigation("Telnet");
 
                     b.Navigation("User");
                 });
@@ -353,17 +319,9 @@ namespace Ticketback.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ticketback.Models.Telnet", "Telnet")
-                        .WithMany("Users")
-                        .HasForeignKey("telnetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Activitie");
 
                     b.Navigation("Groupe");
-
-                    b.Navigation("Telnet");
                 });
 
             modelBuilder.Entity("Ticketback.Models.WorkFromHomeRequest", b =>
@@ -390,13 +348,6 @@ namespace Ticketback.Migrations
 
             modelBuilder.Entity("Ticketback.Models.Groupe", b =>
                 {
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Ticketback.Models.Telnet", b =>
-                {
-                    b.Navigation("Ticket");
-
                     b.Navigation("Users");
                 });
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ticketback.Context;
 
@@ -11,9 +12,11 @@ using Ticketback.Context;
 namespace Ticketback.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230504105700_relation_site")]
+    partial class relation_site
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,16 +100,16 @@ namespace Ticketback.Migrations
 
             modelBuilder.Entity("Ticketback.Models.Telnet", b =>
                 {
-                    b.Property<int>("telnetId")
+                    b.Property<int>("TelnetId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("telnetId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TelnetId"));
 
                     b.Property<string>("libelle")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("telnetId");
+                    b.HasKey("TelnetId");
 
                     b.ToTable("Telnet");
                 });
@@ -131,7 +134,7 @@ namespace Ticketback.Migrations
                     b.Property<int>("Priorite")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Telnet_Id")
+                    b.Property<int>("TelnetId")
                         .HasColumnType("int");
 
                     b.Property<int>("Type")
@@ -157,19 +160,16 @@ namespace Ticketback.Migrations
                     b.Property<DateTime>("startDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("telnetId")
-                        .HasColumnType("int");
-
                     b.Property<int>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("ticketId");
 
+                    b.HasIndex("TelnetId");
+
                     b.HasIndex("etatId");
 
                     b.HasIndex("id");
-
-                    b.HasIndex("telnetId");
 
                     b.HasIndex("userId");
 
@@ -310,6 +310,12 @@ namespace Ticketback.Migrations
 
             modelBuilder.Entity("Ticketback.Models.Ticket", b =>
                 {
+                    b.HasOne("Ticketback.Models.Telnet", "Telnet")
+                        .WithMany("Ticket")
+                        .HasForeignKey("TelnetId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Ticketback.Models.Etat", null)
                         .WithMany("Ticket")
                         .HasForeignKey("etatId");
@@ -317,12 +323,6 @@ namespace Ticketback.Migrations
                     b.HasOne("Ticketback.Models.Etat", "Etat")
                         .WithMany()
                         .HasForeignKey("id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Ticketback.Models.Telnet", "Telnet")
-                        .WithMany("Ticket")
-                        .HasForeignKey("telnetId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

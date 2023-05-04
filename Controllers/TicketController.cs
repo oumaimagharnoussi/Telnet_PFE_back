@@ -27,30 +27,42 @@ namespace Ticketback.Controllers
         {
             var ticket = new Ticket()
             {
-               // PrisEnChargePar = addTicketRequest.PrisEnChargePar,
+                // PrisEnChargePar = addTicketRequest.PrisEnChargePar,
                 Priorite = addTicketRequest.Priorite,
                 Type = addTicketRequest.Type,
                 startDate = addTicketRequest.startDate,
-                endDate = addTicketRequest.startDate,
+                endDate = addTicketRequest.endDate,
                 Description = addTicketRequest.Description,
-               // halfDay = addTicketRequest.halfDay,
+                halfDay = addTicketRequest.halfDay,
                 userId = addTicketRequest.userId,
-               // id = addTicketRequest.id,
-                
-              //  dayNumber = addTicketRequest.dayNumber,
-              //  File = addTicketRequest.File,
-              //  Commentaire = addTicketRequest.Commentaire,
-
-
+                id = addTicketRequest.id,
+                File = addTicketRequest.File,
+                Commentaire = addTicketRequest.Commentaire,
+                telnetId = addTicketRequest.telnetId
             };
+            if (addTicketRequest.halfDay != HalfDay.Morning && addTicketRequest.halfDay != HalfDay.Afternoon)
+            {
+                int dayNumber = CalculateBetweenDates(addTicketRequest.startDate, addTicketRequest.endDate);
+                ticket.dayNumber = dayNumber;
+            }
+            else
+            {
+                ticket.dayNumber = 0.5f;
+                ticket.endDate = addTicketRequest.startDate;
+            }
 
             await _authContext.Tickets.AddAsync(ticket);
             await _authContext.SaveChangesAsync();
 
-
-
             return Ok(ticket);
         }
+        private int CalculateBetweenDates(DateTime startDate, DateTime endDate)
+        {
+            TimeSpan difference = endDate - startDate;
+            int dayNumber = (int)Math.Ceiling(difference.TotalDays);
+            return dayNumber;
+        }
+
         [HttpPut]
         [Route("{ticketId:int}")]
         public async Task<IActionResult> UpdateTicket([FromRoute] int ticketId, UpdateTicketRequest updateTicketRequest)

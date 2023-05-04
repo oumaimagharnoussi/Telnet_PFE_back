@@ -31,8 +31,11 @@ namespace Ticketback.Models
         [MaxLength(255)]
         public string File { get; set; }
         public virtual ICollection<Commentaire> Commentaire { get; set; }
-       /* public int prisEnChargePar { get; set; }
-        [ForeignKey("prisEnChargePar")]
-        public User PrisEnChargePar { get; set; }*/
+        /* public int prisEnChargePar { get; set; }
+         [ForeignKey("prisEnChargePar")]
+         public User PrisEnChargePar { get; set; }*/
+        public int telnetId { get; set; }
+        [ForeignKey("Telnet_Id")]
+        public Telnet Telnet { get; set; }
     }
 }

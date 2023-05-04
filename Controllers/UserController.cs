@@ -82,7 +82,8 @@ namespace Ticketback.Controllers
               new Claim("usernumber", user.userNumber),
               new Claim("Groups", user.groupId.ToString()),
               new Claim("userId", user.userId.ToString()),
-              new Claim("pictureUrl", user.picture)
+              new Claim("pictureUrl", user.picture),
+               new Claim("site", user.telnetId.ToString())
           };
 
 
@@ -177,7 +178,7 @@ namespace Ticketback.Controllers
                 //Role = addUserRequest.Role,
                 //Token = addUserRequest.Token,
                groupId = addUserRequest.groupId,
-                
+                telnetId = addUserRequest.telnetId,
                 activityId = addUserRequest.activityId
             };
             //user.userPassword = PasswordHasher.HashPassword(user.userPassword);
@@ -204,13 +205,13 @@ namespace Ticketback.Controllers
                 user.picture = updateUserRequest.picture;
                 user.qualification = updateUserRequest.qualification;
                 user.email = updateUserRequest.email;
-               // user.Role = updateUserRequest.Role;
-                //user.Token = updateUserRequest.Token;
-               // user.activityId = updateUserRequest.activityId;
+                 //user.Role = updateUserRequest.Role;
+               // user.Token = updateUserRequest.Token;
+                // user.activityId = updateUserRequest.activityId;
                 //user.groupId = updateUserRequest.groupId;
-                //user.Sites = updateUserRequest.Sites;
+               // user.telnetId = updateUserRequest.telnetId;
 
-               // user.userPassword = PasswordHasher.HashPassword(user.userPassword);
+                // user.userPassword = PasswordHasher.HashPassword(user.userPassword);
                 await _authContext.SaveChangesAsync();
                 return Ok(user);
             }

@@ -21,5 +21,8 @@
        
 
         public Groupe Groupe { get; set; }
+        public int telnetId { get; set; }
+       
+        public Telnet Telnet { get; set; }
     }
 }
