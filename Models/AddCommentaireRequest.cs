@@ -6,8 +6,12 @@ namespace Ticketback.Models
     public class AddCommentaireRequest
     {
         public string libelle { get; set; }
+        public DateTime dateCreation { get; set; }
         public int userId { get; set; }
         [ForeignKey("userId")]
         public User User { get; set; }
+        public int ticketId { get; set; }
+        [ForeignKey("ticketId")]
+        public Ticket Ticket { get; set; }
     }
 }

@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+
 using Ticketback.Context;
-using Ticketback.Migrations;
+using Microsoft.EntityFrameworkCore;
 using Ticketback.Models;
+using Ticketback.Helpers;
+
+using Ticketback.UtilityService;
+
+
 
 namespace Ticketback.Controllers
 {
@@ -12,10 +16,14 @@ namespace Ticketback.Controllers
     public class TicketController : ControllerBase
     {
         private readonly AppDbContext _authContext;
+        private readonly IConfiguration _configuration;
+        private readonly IEmailService emailService;
 
-        public TicketController(AppDbContext appDbContext)
+        public TicketController(IConfiguration configuration, AppDbContext appDbContext, IEmailService service)
         {
+            _configuration = configuration;
             _authContext = appDbContext;
+            this.emailService = service;
         }
         [HttpGet]
         public async Task<ActionResult<Ticket>> GetAllTickets()
@@ -40,19 +48,17 @@ namespace Ticketback.Controllers
                 Commentaire = addTicketRequest.Commentaire,
                 telnetId = addTicketRequest.telnetId
             };
-            if (addTicketRequest.halfDay != HalfDay.Morning && addTicketRequest.halfDay != HalfDay.Afternoon)
-            {
-                int dayNumber = CalculateBetweenDates(addTicketRequest.startDate, addTicketRequest.endDate);
-                ticket.dayNumber = dayNumber;
-            }
-            else
-            {
-                ticket.dayNumber = 0.5f;
-                ticket.endDate = addTicketRequest.startDate;
-            }
+
+            int dayNumber = CalculateBetweenDates(addTicketRequest.startDate, addTicketRequest.endDate);
+            ticket.dayNumber = dayNumber;
+
+
 
             await _authContext.Tickets.AddAsync(ticket);
             await _authContext.SaveChangesAsync();
+            // Send email
+            await SendMail();
+
 
             return Ok(ticket);
         }
@@ -81,6 +87,10 @@ namespace Ticketback.Controllers
                 ticket.dayNumber = updateTicketRequest.dayNumber;
                 ticket.File = updateTicketRequest.File;
                 ticket.Commentaire = updateTicketRequest.Commentaire;
+                ticket.telnetId = updateTicketRequest.telnetId;
+
+                int dayNumber = CalculateBetweenDates(updateTicketRequest.startDate, updateTicketRequest.endDate);
+                ticket.dayNumber = dayNumber;
 
                 await _authContext.SaveChangesAsync();
                 return Ok(ticket);
@@ -92,13 +102,33 @@ namespace Ticketback.Controllers
         public async Task<IActionResult> GetTicket([FromRoute] int ticketId)
         {
             var ticket = await _authContext.Tickets.FindAsync(ticketId);
+
             if (ticket == null)
             {
                 return NotFound();
             }
-            return Ok(ticket);
 
+            return Ok(ticket);
         }
+
+
+        [HttpGet]
+        [Route("{ticketId:int}/commentaires")]
+        public async Task<IActionResult> GetTicketCommentaires([FromRoute] int ticketId)
+        {
+            var commentaires = await _authContext.Commentaires
+                .Where(c => c.ticketId == ticketId)
+                .ToListAsync();
+
+            if (commentaires == null || commentaires.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(commentaires);
+        }
+
+
         [HttpDelete]
         [Route("{ticketId:int}")]
         public async Task<IActionResult> DeleteTicket([FromRoute] int ticketId)
@@ -112,5 +142,46 @@ namespace Ticketback.Controllers
             }
             return NotFound();
         }
+        [HttpPost("SendMail")]
+        public async Task<IActionResult> SendMail()
+        {
+            try
+            {
+                Mailrequest mailrequest = new Mailrequest
+                {
+                    ToEmail = "omaymagharnoussi@gmail.com",
+                    Subject = "Successful Ticket Creation Confirmation",
+                    Body = @"<html>
+            <head>
+            </head>
+            <body>
+               <div>
+                <div>
+                 <div>
+                   <h1>We are pleased to inform you that your ticket has been successfully created.</h1>
+                   <hr>
+                   <p>We have taken your request into account and our team will review it as soon as possible. We will keep you informed of the progress of your request and we will do our best to resolve your problem or respond to your request as soon as possible.</p>
+                   
+                 
+                   <p> Best regards,<br><br> Telnet Holding </p>
+                </div>
+               </div>
+              </div>
+
+            </body >
+            </html > "
+
+                };
+
+                await emailService.SendEmailAsync(mailrequest);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
     }
 }

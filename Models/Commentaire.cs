@@ -7,6 +7,7 @@ namespace Ticketback.Models
         [Key]
         public int commentaireId { get; set; }
         public string libelle { get; set; }
+        public DateTime dateCreation { get; set; }
         public int userId { get; set; }
         [ForeignKey("userId")]
         public User User { get; set; }

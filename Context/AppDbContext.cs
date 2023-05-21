@@ -150,9 +150,7 @@ namespace Ticketback.Context
                 .Property(w => w.dayNumber)
                 .HasDefaultValue(1);
 
-            modelBuilder.Entity<WorkFromHomeRequest>()
-                .Property(w => w.halfDay)
-                .HasDefaultValue(HalfDay.Morning);
+           
         }
 
         internal Task ChangePasswordAsync(object user, string currentPassword, string newPassword)

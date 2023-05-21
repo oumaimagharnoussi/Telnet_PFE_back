@@ -3,15 +3,20 @@ using Ticketback.Models;
 
 using MimeKit;
 using MailKit.Net.Smtp;
+using Ticketback.Helpers;
+using Microsoft.Extensions.Options;
+using MailKit.Security;
 
 namespace Ticketback.UtilityService
 {
     public class EmailService : IEmailService
     {
         private readonly IConfiguration _config;
-        public EmailService(IConfiguration configuration)
+        private readonly EmailSettings emailSettings;
+        public EmailService(IConfiguration configuration, IOptions<EmailSettings> options)
         {
             _config = configuration;
+            emailSettings = options.Value;
         }
         public void SendEmail(EmailModel emailModel)
         {
@@ -44,6 +49,26 @@ namespace Ticketback.UtilityService
                     client.Dispose();
                 }
 
+            }
+        }
+
+        public async Task SendEmailAsync(Mailrequest mailrequest)
+        {
+            var email = new MimeMessage();
+            email.Sender = MailboxAddress.Parse(emailSettings.Email);
+            email.To.Add(MailboxAddress.Parse(mailrequest.ToEmail));
+            email.Subject = mailrequest.Subject;
+
+            var builder = new BodyBuilder();
+            builder.HtmlBody = mailrequest.Body;
+            email.Body = builder.ToMessageBody();
+
+            using (var smtp = new SmtpClient())
+            {
+                await smtp.ConnectAsync(emailSettings.SmtpServer, emailSettings.Port, SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync(emailSettings.Email, emailSettings.Password);
+                await smtp.SendAsync(email);
+                await smtp.DisconnectAsync(true);
             }
         }
 

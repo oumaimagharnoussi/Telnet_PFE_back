@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -7,19 +6,12 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Text;
 using Ticketback.Context;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
-using System.Runtime.InteropServices;
-using System.Data;
-using System.Net.Http.Headers;
 using Ticketback.Models;
 using Ticketback.Helpers;
 using System.Security.Cryptography;
 using Ticketback.UtilityService;
-using Ticketback.Migrations;
+
 
 
 

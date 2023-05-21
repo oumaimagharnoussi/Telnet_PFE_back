@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 
 using System.Text;
 using Ticketback.Context;
+using Ticketback.Helpers;
 using Ticketback.UtilityService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,9 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddScoped<IEmailService, EmailService>();
+
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

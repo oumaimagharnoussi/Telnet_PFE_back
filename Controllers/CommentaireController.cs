@@ -28,7 +28,9 @@ namespace Ticketback.Controllers
             {
 
                 libelle = addCommentaireRequest.libelle,
+                dateCreation = addCommentaireRequest.dateCreation,
                 userId = addCommentaireRequest.userId,
+                ticketId= addCommentaireRequest.ticketId,
 
             };
 
