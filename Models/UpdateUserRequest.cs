@@ -11,7 +11,7 @@
         public string picture { get; set; } //= string.Empty;
         public int qualification { get; set; }
         // public string Token { get; set; }
-        // public string Role { get; set; }
+         public string Role { get; set; }
         public int activityId { get; set; }
         
 

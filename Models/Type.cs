@@ -2,11 +2,11 @@
 {
     public enum Type
     {
-        Assistance_diverse = 1,
-        impression_locale = 2,
-        impression_reseau = 3,
-        Droit_d_acces_initial = 4,
-        Droit_d_acces_changement = 5,
-        Droit_d_acces_revue = 6
+        Diversified_aid=1,
+        local_printing=2,
+        network_printing=3,
+        Initial_right_of_access=4,
+        Right_of_access_change=5,
+        Right_of_access_reviewed=6
     }
 }

@@ -157,6 +157,9 @@ namespace Ticketback.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(1);
 
+                    b.Property<int>("prisEnCharge")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("startDate")
                         .HasColumnType("datetime2");
 
@@ -171,6 +174,8 @@ namespace Ticketback.Migrations
                     b.HasIndex("etatId");
 
                     b.HasIndex("id");
+
+                    b.HasIndex("prisEnCharge");
 
                     b.HasIndex("telnetId");
 
@@ -321,6 +326,12 @@ namespace Ticketback.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Ticketback.Models.User", "PrisEnCharge")
+                        .WithMany()
+                        .HasForeignKey("prisEnCharge")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Ticketback.Models.Telnet", "Telnet")
                         .WithMany("Ticket")
                         .HasForeignKey("telnetId")
@@ -334,6 +345,8 @@ namespace Ticketback.Migrations
                         .IsRequired();
 
                     b.Navigation("Etat");
+
+                    b.Navigation("PrisEnCharge");
 
                     b.Navigation("Telnet");
 

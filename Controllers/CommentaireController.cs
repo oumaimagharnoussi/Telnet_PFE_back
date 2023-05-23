@@ -53,5 +53,18 @@ namespace Ticketback.Controllers
             return Ok(commentaire);
 
         }
+        [HttpDelete]
+        [Route("{commentaireId:int}")]
+        public async Task<IActionResult> DeleteCommentaire([FromRoute] int commentaireId)
+        {
+            var commentaire = await _authContext.Commentaires.FindAsync(commentaireId);
+            if (commentaire != null)
+            {
+                _authContext.Remove(commentaire);
+                await _authContext.SaveChangesAsync();
+                return Ok(commentaire);
+            }
+            return NotFound();
+        }
     }
 }

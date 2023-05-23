@@ -57,7 +57,7 @@ namespace Ticketback.Controllers
             await _authContext.Tickets.AddAsync(ticket);
             await _authContext.SaveChangesAsync();
             // Send email
-            await SendMail();
+            await SendMail(addTicketRequest);
 
 
             return Ok(ticket);
@@ -71,11 +71,19 @@ namespace Ticketback.Controllers
 
         [HttpPut]
         [Route("{ticketId:int}")]
+        
         public async Task<IActionResult> UpdateTicket([FromRoute] int ticketId, UpdateTicketRequest updateTicketRequest)
         {
             var ticket = await _authContext.Tickets.FindAsync(ticketId);
             if (ticket != null)
             {
+                // Check if ticket.id has changed
+                if (ticket.id != updateTicketRequest.id)
+                {
+                    // Call the SendMailEtat method to send an email
+                    await SendMailEtat(updateTicketRequest);
+                }
+
                 ticket.Priorite = updateTicketRequest.Priorite;
                 ticket.Type = updateTicketRequest.Type;
                 ticket.startDate = updateTicketRequest.startDate;
@@ -97,6 +105,7 @@ namespace Ticketback.Controllers
             }
             return NotFound();
         }
+
         [HttpGet]
         [Route("{ticketId:int}")]
         public async Task<IActionResult> GetTicket([FromRoute] int ticketId)
@@ -138,39 +147,123 @@ namespace Ticketback.Controllers
             {
                 _authContext.Remove(ticket);
                 await _authContext.SaveChangesAsync();
+                await SendMailDelete(ticket);
                 return Ok(ticket);
             }
             return NotFound();
         }
-        [HttpPost("SendMail")]
-        public async Task<IActionResult> SendMail()
+
+       [HttpPost("SendMail")]
+        public async Task<IActionResult> SendMail(AddTicketRequest addTicketRequest)
         {
             try
             {
+                User user = await _authContext.Users.FindAsync(addTicketRequest.userId);
                 Mailrequest mailrequest = new Mailrequest
                 {
-                    ToEmail = "omaymagharnoussi@gmail.com",
+                    ToEmail = user.email,
                     Subject = "Successful Ticket Creation Confirmation",
-                    Body = @"<html>
-            <head>
-            </head>
-            <body>
-               <div>
-                <div>
-                 <div>
-                   <h1>We are pleased to inform you that your ticket has been successfully created.</h1>
-                   <hr>
-                   <p>We have taken your request into account and our team will review it as soon as possible. We will keep you informed of the progress of your request and we will do our best to resolve your problem or respond to your request as soon as possible.</p>
-                   
-                 
-                   <p> Best regards,<br><br> Telnet Holding </p>
-                </div>
-               </div>
-              </div>
+                    Body = $@"<html>
+                        <head>
+                        </head>
+                        <body>
+                            <div>
+                                <div>
+                                    <div>
+                                        <h1>We are pleased to inform you that your ticket has been successfully created.</h1>
+                                        <hr>
 
-            </body >
-            </html > "
+                                         <p>A ticket has been created for {user.firstName} {user.lastName}
+                                          with ticket reference {user.userNumber}. It is for {addTicketRequest.halfDay} 
+                                          with priority {addTicketRequest.Priorite} and type {addTicketRequest.Type}.</p>
+                                       
+                                        <p>We have taken your request into account, and our team will review it as soon as possible. We will keep you informed of the progress of your request and will do our best to resolve your problem or respond to your request as soon as possible.</p>
+                                        <p>Best regards,<br><br>Telnet Holding</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </body>
+                    </html>"
+                };
 
+                await emailService.SendEmailAsync(mailrequest);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+
+        [HttpPost("SendMailDelete")]
+        public async Task<IActionResult> SendMailDelete(Ticket ticket)
+        {
+            try
+            {
+                User user = await _authContext.Users.FindAsync(ticket.userId);
+                Mailrequest mailrequest = new Mailrequest
+                {
+                    ToEmail = user.email,
+                    Subject = "Cancellation of Ticket",
+                    Body = $@"<html>
+                        <head>
+                        </head>
+                        <body>
+                            <div>
+                                <div>
+                                    <div>
+                                        <h1>Cancellation of Ticket</h1>
+                                        <hr>
+                                        <p>We regret to inform you that your ticket created by {user.firstName} {user.lastName}
+                                        with ticket reference {user.userNumber} has been cancelled.</p>
+                                        <p>Best regards,<br><br>Telnet Holding</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </body>
+                    </html>"
+                };
+
+                await emailService.SendEmailAsync(mailrequest);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost("SendMailEtat")]
+        public async Task<IActionResult> SendMailEtat(UpdateTicketRequest updateTicketRequest)
+        {
+            try
+            {
+                User user = await _authContext.Users.FindAsync(updateTicketRequest.userId);
+                Etat etat = await _authContext.Etats.FindAsync(updateTicketRequest.id);
+                Mailrequest mailrequest = new Mailrequest
+                {
+                    ToEmail = user.email,
+                    Subject = "Ticket Status Update",
+                    Body = $@"<html>
+                        <head>
+                        </head>
+                        <body>
+                            <div>
+                                <div>
+                                    <div>
+                                        <h1>Ticket Status Update</h1>
+                                        <hr>
+                                        <p> I am writing to inform you that ticket {user.userNumber} 
+                         has been updated and its status has been changed to {etat.libelle}.</p>
+                                        <p>Best regards,<br><br>Telnet Holding</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </body>
+                    </html>"
                 };
 
                 await emailService.SendEmailAsync(mailrequest);

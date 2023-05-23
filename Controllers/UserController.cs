@@ -163,17 +163,17 @@ namespace Ticketback.Controllers
                 firstName = addUserRequest.firstName,
                 lastName = addUserRequest.lastName,
                 userName = addUserRequest.userName,
-                //userPassword = addUserRequest.userPassword,
+                userPassword = addUserRequest.userPassword,
                 picture = addUserRequest.picture,
-               // qualification = addUserRequest.qualification,
+                qualification = addUserRequest.qualification,
                 email = addUserRequest.email,
-                //Role = addUserRequest.Role,
-                //Token = addUserRequest.Token,
+                Role = addUserRequest.Role,
+                Token = addUserRequest.Token,
                groupId = addUserRequest.groupId,
                 telnetId = addUserRequest.telnetId,
                 activityId = addUserRequest.activityId
             };
-            //user.userPassword = PasswordHasher.HashPassword(user.userPassword);
+            user.userPassword = PasswordHasher.HashPassword(user.userPassword);
             await _authContext.Users.AddAsync(user);
             await _authContext.SaveChangesAsync();
 
@@ -193,17 +193,17 @@ namespace Ticketback.Controllers
                 user.firstName = updateUserRequest.firstName;
                 user.lastName = updateUserRequest.lastName;
                 user.userName = updateUserRequest.userName;
-                //user.userPassword = updateUserRequest.userPassword;
+                user.userPassword = updateUserRequest.userPassword;
                 user.picture = updateUserRequest.picture;
                 user.qualification = updateUserRequest.qualification;
                 user.email = updateUserRequest.email;
-                 //user.Role = updateUserRequest.Role;
+                 user.Role = updateUserRequest.Role;
                // user.Token = updateUserRequest.Token;
-                // user.activityId = updateUserRequest.activityId;
-                //user.groupId = updateUserRequest.groupId;
-               // user.telnetId = updateUserRequest.telnetId;
+               user.activityId = updateUserRequest.activityId;
+                user.groupId = updateUserRequest.groupId;
+                user.telnetId = updateUserRequest.telnetId;
 
-                // user.userPassword = PasswordHasher.HashPassword(user.userPassword);
+                 user.userPassword = PasswordHasher.HashPassword(user.userPassword);
                 await _authContext.SaveChangesAsync();
                 return Ok(user);
             }

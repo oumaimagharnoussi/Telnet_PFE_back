@@ -13,10 +13,7 @@ namespace Ticketback.Models
         [MaxLength(500)]
         public string Description { get; set; }
         public HalfDay halfDay { get; set; }
-        /*public int groupId { get; set; }
-        [ForeignKey("groupId")]
-        public Groupe Groupe { get; set; }*/
-
+        
         public int userId { get; set; }
         [ForeignKey("userId")]
         public User User { get; set; }
