@@ -32,10 +32,10 @@ namespace Ticketback.Models
         [MaxLength(255)]
         public string File { get; set; }
         public virtual ICollection<Commentaire> Commentaire { get; set; }
-       /*public int prisEnCharge { get; set; } // Foreign key for the user responsible for the ticket
         [ForeignKey("prisEnCharge")]
+        public int? prisEnChargeId { get; set; } // Nullable foreign key for the user responsible for the ticket
         public User PrisEnCharge { get; set; } // User responsible for the ticket
-       */
     }
-
 }
+
+

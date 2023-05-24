@@ -35,7 +35,7 @@ namespace Ticketback.Controllers
         {
             var ticket = new Ticket()
             {
-                // PrisEnChargePar = addTicketRequest.PrisEnChargePar,
+                prisEnChargeId = addTicketRequest.prisEnChargeId,
                 Priorite = addTicketRequest.Priorite,
                 Type = addTicketRequest.Type,
                 startDate = addTicketRequest.startDate,
@@ -83,7 +83,7 @@ namespace Ticketback.Controllers
                     // Call the SendMailEtat method to send an email
                     await SendMailEtat(updateTicketRequest);
                 }
-
+                ticket.prisEnChargeId = updateTicketRequest.prisEnChargeId;
                 ticket.Priorite = updateTicketRequest.Priorite;
                 ticket.Type = updateTicketRequest.Type;
                 ticket.startDate = updateTicketRequest.startDate;
@@ -153,40 +153,97 @@ namespace Ticketback.Controllers
             return NotFound();
         }
 
-       [HttpPost("SendMail")]
+        /* [HttpPost("SendMail")]
+          public async Task<IActionResult> SendMail(AddTicketRequest addTicketRequest)
+          {
+              try
+              {
+                  User user = await _authContext.Users.FindAsync(addTicketRequest.userId);
+                  Mailrequest mailrequest = new Mailrequest
+                  {
+                      ToEmail = user.email,
+                      Subject = "Successful Ticket Creation Confirmation",
+                      Body = $@"<html>
+                          <head>
+                          </head>
+                          <body>
+                              <div>
+                                  <div>
+                                      <div>
+                                          <h1>We are pleased to inform you that your ticket has been successfully created.</h1>
+                                          <hr>
+
+                                           <p>A ticket has been created for {user.firstName} {user.lastName}
+                                            with ticket reference {user.userNumber}. It is for {addTicketRequest.halfDay} 
+                                            with priority {addTicketRequest.Priorite} and type {addTicketRequest.Type}.</p>
+
+                                          <p>We have taken your request into account, and our team will review it as soon as possible. We will keep you informed of the progress of your request and will do our best to resolve your problem or respond to your request as soon as possible.</p>
+                                          <p>Best regards,<br><br>Telnet Holding</p>
+                                      </div>
+                                  </div>
+                              </div>
+                          </body>
+                      </html>"
+                  };
+
+                  await emailService.SendEmailAsync(mailrequest);
+
+                  return Ok();
+              }
+              catch (Exception ex)
+              {
+                  throw;
+              }
+          }*/
+        [HttpPost("SendMail")]
         public async Task<IActionResult> SendMail(AddTicketRequest addTicketRequest)
         {
             try
             {
                 User user = await _authContext.Users.FindAsync(addTicketRequest.userId);
+
+                // Retrieve all users from the "Support" group
+                List<User> supportUsers = await _authContext.Users
+                    .Where(u => u.Groupe.libelle == "Support")
+                    .ToListAsync();
+
+                List<string> recipientEmails = new List<string>();
+                recipientEmails.Add(user.email); // Add the original recipient
+
+                // Add email addresses of users from the "Support" group
+                foreach (var supportUser in supportUsers)
+                {
+                    recipientEmails.Add(supportUser.email);
+                }
+
                 Mailrequest mailrequest = new Mailrequest
                 {
-                    ToEmail = user.email,
+                    ToEmail = string.Join(",", recipientEmails), // Comma-separated email addresses
                     Subject = "Successful Ticket Creation Confirmation",
                     Body = $@"<html>
-                        <head>
-                        </head>
-                        <body>
+                <head>
+                </head>
+                <body>
+                    <div>
+                        <div>
                             <div>
-                                <div>
-                                    <div>
-                                        <h1>We are pleased to inform you that your ticket has been successfully created.</h1>
-                                        <hr>
+                                <h1>We are pleased to inform you that your ticket has been successfully created.</h1>
+                                <hr>
 
-                                         <p>A ticket has been created for {user.firstName} {user.lastName}
-                                          with ticket reference {user.userNumber}. It is for {addTicketRequest.halfDay} 
-                                          with priority {addTicketRequest.Priorite} and type {addTicketRequest.Type}.</p>
-                                       
-                                        <p>We have taken your request into account, and our team will review it as soon as possible. We will keep you informed of the progress of your request and will do our best to resolve your problem or respond to your request as soon as possible.</p>
-                                        <p>Best regards,<br><br>Telnet Holding</p>
-                                    </div>
-                                </div>
+                                 <p>A ticket has been created for {user.firstName} {user.lastName}
+                                  with ticket reference {user.userNumber}. It is for {addTicketRequest.halfDay} 
+                                  with priority {addTicketRequest.Priorite} and type {addTicketRequest.Type}.</p>
+                               
+                                <p>We have taken your request into account, and our team will review it as soon as possible. We will keep you informed of the progress of your request and will do our best to resolve your problem or respond to your request as soon as possible.</p>
+                                <p>Best regards,<br><br>Telnet Holding</p>
                             </div>
-                        </body>
-                    </html>"
+                        </div>
+                    </div>
+                </body>
+            </html>"
                 };
 
-                await emailService.SendEmailAsync(mailrequest);
+                await emailService.SendEmail1Async(mailrequest);
 
                 return Ok();
             }
@@ -195,6 +252,7 @@ namespace Ticketback.Controllers
                 throw;
             }
         }
+
 
 
         [HttpPost("SendMailDelete")]
@@ -242,6 +300,7 @@ namespace Ticketback.Controllers
             try
             {
                 User user = await _authContext.Users.FindAsync(updateTicketRequest.userId);
+                User PrisEnCharge = await _authContext.Users.FindAsync(updateTicketRequest.prisEnChargeId);
                 Etat etat = await _authContext.Etats.FindAsync(updateTicketRequest.id);
                 Mailrequest mailrequest = new Mailrequest
                 {
@@ -256,8 +315,8 @@ namespace Ticketback.Controllers
                                     <div>
                                         <h1>Ticket Status Update</h1>
                                         <hr>
-                                        <p> I am writing to inform you that ticket {user.userNumber} 
-                         has been updated and its status has been changed to {etat.libelle}.</p>
+                                        <p> I am writing to inform you that ticket {user.userNumber}, supported by {PrisEnCharge.firstName}  {PrisEnCharge.lastName}  
+                                        has been updated and its status has been changed to {etat.libelle}.</p>
                                         <p>Best regards,<br><br>Telnet Holding</p>
                                     </div>
                                 </div>

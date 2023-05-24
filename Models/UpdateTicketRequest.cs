@@ -13,10 +13,7 @@ namespace Ticketback.Models
         [MaxLength(500)]
         public string Description { get; set; }
         public HalfDay halfDay { get; set; }
-        /*public int groupId { get; set; }
-        [ForeignKey("groupId")]
-        public Groupe Groupe { get; set; }*/
-
+        
         public int userId { get; set; }
         [ForeignKey("userId")]
         public User User { get; set; }
@@ -31,9 +28,9 @@ namespace Ticketback.Models
         [MaxLength(255)]
         public string File { get; set; }
         public virtual ICollection<Commentaire> Commentaire { get; set; }
-        /*  public int prisEnChargePar { get; set; }
-          [ForeignKey("prisEnChargePar")]
-          public User PrisEnChargePar { get; set; }*/
+        [ForeignKey("prisEnCharge")]
+        public int? prisEnChargeId { get; set; } 
+        public User PrisEnCharge { get; set; }
     }
 
 }

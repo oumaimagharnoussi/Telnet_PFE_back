@@ -72,5 +72,40 @@ namespace Ticketback.UtilityService
             }
         }
 
+
+        public async Task SendEmail1Async(Mailrequest mailrequest)
+        {
+            var email = new MimeMessage();
+            email.Sender = MailboxAddress.Parse(emailSettings.Email);
+
+            try
+            {
+                foreach (var recipientEmail in mailrequest.ToEmail.Split(','))
+                {
+                    email.To.Add(MailboxAddress.Parse(recipientEmail.Trim()));
+                }
+            }
+            catch (ParseException ex)
+            {
+                // Handle the parse exception here
+                Console.WriteLine($"Failed to parse email address: {ex.Message}");
+                throw;
+            }
+
+            email.Subject = mailrequest.Subject;
+
+            var builder = new BodyBuilder();
+            builder.HtmlBody = mailrequest.Body;
+            email.Body = builder.ToMessageBody();
+
+            using (var smtp = new SmtpClient())
+            {
+                await smtp.ConnectAsync(emailSettings.SmtpServer, emailSettings.Port, SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync(emailSettings.Email, emailSettings.Password);
+                await smtp.SendAsync(email);
+                await smtp.DisconnectAsync(true);
+            }
+        }
+
     }
 }

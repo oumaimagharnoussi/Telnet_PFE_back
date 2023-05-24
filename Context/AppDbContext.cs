@@ -113,11 +113,12 @@ namespace Ticketback.Context
                 .Property(t => t.id)
                 .HasDefaultValue(1);
 
-            /* modelBuilder.Entity<Ticket>()
-                 .HasOne(t => t.PrisEnChargePar)
-                 .WithMany()
-                 .HasForeignKey(t => t.prisEnChargePar)
-                 .OnDelete(DeleteBehavior.Restrict);*/
+            modelBuilder.Entity<Ticket>()
+       .HasOne(t => t.PrisEnCharge)
+       .WithMany()
+       .HasForeignKey(t => t.prisEnChargeId)
+       .OnDelete(DeleteBehavior.Restrict);
+
 
             // Configure the Commentaire entity
             modelBuilder.Entity<Commentaire>()

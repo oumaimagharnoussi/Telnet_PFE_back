@@ -8,6 +8,7 @@ namespace Ticketback.UtilityService
         void SendEmail(EmailModel emailModel);
        
         Task SendEmailAsync(Mailrequest mailrequest);
-        
+        Task SendEmail1Async(Mailrequest mailrequest);
+
     }
 }

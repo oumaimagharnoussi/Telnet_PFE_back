@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ticketback.Context;
 
@@ -11,9 +12,11 @@ using Ticketback.Context;
 namespace Ticketback.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230524105041_userprisench")]
+    partial class userprisench
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,7 +160,7 @@ namespace Ticketback.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(1);
 
-                    b.Property<int?>("prisEnChargeId")
+                    b.Property<int?>("prisEnCharge")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("startDate")
@@ -175,7 +178,7 @@ namespace Ticketback.Migrations
 
                     b.HasIndex("id");
 
-                    b.HasIndex("prisEnChargeId");
+                    b.HasIndex("prisEnCharge");
 
                     b.HasIndex("telnetId");
 
@@ -328,7 +331,7 @@ namespace Ticketback.Migrations
 
                     b.HasOne("Ticketback.Models.User", "PrisEnCharge")
                         .WithMany()
-                        .HasForeignKey("prisEnChargeId")
+                        .HasForeignKey("prisEnCharge")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Ticketback.Models.Telnet", "Telnet")
