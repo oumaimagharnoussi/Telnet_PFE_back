@@ -55,7 +55,8 @@ namespace Ticketback.UtilityService
         public async Task SendEmailAsync(Mailrequest mailrequest)
         {
             var email = new MimeMessage();
-            email.Sender = MailboxAddress.Parse(emailSettings.Email);
+            email.From.Add(new MailboxAddress("Telnet Holding", emailSettings.Email));
+
             email.To.Add(MailboxAddress.Parse(mailrequest.ToEmail));
             email.Subject = mailrequest.Subject;
 
@@ -73,10 +74,12 @@ namespace Ticketback.UtilityService
         }
 
 
+
         public async Task SendEmail1Async(Mailrequest mailrequest)
         {
             var email = new MimeMessage();
-            email.Sender = MailboxAddress.Parse(emailSettings.Email);
+            email.From.Add(new MailboxAddress("Telnet Holding", emailSettings.Email));
+
 
             try
             {

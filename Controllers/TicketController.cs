@@ -35,7 +35,7 @@ namespace Ticketback.Controllers
         {
             var ticket = new Ticket()
             {
-                prisEnChargeId = addTicketRequest.prisEnChargeId,
+               
                 Priorite = addTicketRequest.Priorite,
                 Type = addTicketRequest.Type,
                 startDate = addTicketRequest.startDate,
@@ -45,7 +45,7 @@ namespace Ticketback.Controllers
                 userId = addTicketRequest.userId,
                 id = addTicketRequest.id,
                 File = addTicketRequest.File,
-                Commentaire = addTicketRequest.Commentaire,
+               
                 telnetId = addTicketRequest.telnetId
             };
 
@@ -102,6 +102,7 @@ namespace Ticketback.Controllers
 
                 await _authContext.SaveChangesAsync();
                 return Ok(ticket);
+
             }
             return NotFound();
         }
@@ -294,7 +295,7 @@ namespace Ticketback.Controllers
             }
         }
 
-        [HttpPost("SendMailEtat")]
+       [HttpPost("SendMailEtat")]
         public async Task<IActionResult> SendMailEtat(UpdateTicketRequest updateTicketRequest)
         {
             try
@@ -315,7 +316,7 @@ namespace Ticketback.Controllers
                                     <div>
                                         <h1>Ticket Status Update</h1>
                                         <hr>
-                                        <p> I am writing to inform you that ticket {user.userNumber}, supported by {PrisEnCharge.firstName}  {PrisEnCharge.lastName}  
+                                        <p> I am writing to inform you that ticket {user.userNumber}, supported by {PrisEnCharge.firstName}  {PrisEnCharge.lastName}
                                         has been updated and its status has been changed to {etat.libelle}.</p>
                                         <p>Best regards,<br><br>Telnet Holding</p>
                                     </div>
